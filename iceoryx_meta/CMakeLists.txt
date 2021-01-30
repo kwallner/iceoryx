@@ -16,6 +16,13 @@ cmake_minimum_required(VERSION 3.5)
 file (STRINGS "../VERSION" iceoryx_VERSION)
 project(iceoryx_meta VERSION ${iceoryx_VERSION})
 
+if (CONAN_BUILD)
+include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+conan_basic_setup()
+endif()
+
+include(CTest)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
@@ -31,7 +38,11 @@ endif()
 
 # ===== Dependencies
 if(TOML_CONFIG)
+    if (CONAN_CPPTOML_ROOT)
+    find_package(cpptoml REQUIRED)
+    else()
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/cpptoml/ ${CMAKE_BINARY_DIR}/dependencies/cpptoml/prebuild)
+    endif()
 endif()
 
 # ===== Core
