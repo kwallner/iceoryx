@@ -15,7 +15,11 @@
 cmake_minimum_required(VERSION 3.5)
 
 if (BUILD_TEST)
+    if (CONAN_GTEST_ROOT)
+    find_package(GTest CONFIG REQUIRED)
+    else()
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../cmake/googletest ${CMAKE_BINARY_DIR}/dependencies/googletest/prebuild)
+    endif()
 
     ### create component list
     set(COMPONENTS "utils" "posh")
