@@ -16,8 +16,12 @@ class CpptomlConan(ConanFile):
     scm = { "type": "git", "url": "auto", "revision": "auto" }
     options = {"shared": [True, False], "fPIC": [True, False], "build_test": [True, False], "build_doc": [True, False], "build_examples": [True, False]}
     default_options = {"shared": False, "fPIC": True, "build_test" : True, "build_doc" : False, "build_examples" : True } 
+    exports = "VERSION"
     no_copy_source = True
     _cmake = None
+
+    def set_version(self):
+        self.version = tools.load(os.path.join(self.recipe_folder, "VERSION")).strip()
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -75,7 +79,6 @@ class CpptomlConan(ConanFile):
     def package(self):
         cmake = self._cmake_configure()
         cmake.install()
-        self.copy(pattern="iceoryxConfig.cmake", dst="lib/cmake/iceoryx")
 
     def package_id(self):
         del self.info.options.build_test
